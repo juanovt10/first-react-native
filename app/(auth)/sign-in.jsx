@@ -22,8 +22,13 @@ const SignIn = () => {
     
     setIsSubmitting(true);
     try {
+      // check for the sign in
       await signIn(form.email, form.password);
+
+      // then get the result by accessing the context provider
       const result = await getCurrentUser();
+
+      // set up the provider states
       setUser(result);
       setIsLogged(true);
 

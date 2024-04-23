@@ -23,7 +23,11 @@ const SignUp = () => {
     
     setIsSubmitting(true);
     try {
+
+      // trigger the createUser method to add the info to the back end
       const result = await createUser(form.email, form.password, form.username);
+
+      // use the result to trigger the context props (this comes from the global provider)
       setUser(result);
       setIsLogged(true);
 
