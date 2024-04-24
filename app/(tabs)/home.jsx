@@ -6,13 +6,14 @@ import { images } from '../../constants'
 import SearchInput from '../../components/SearchInput'
 import Trending from '../../components/Trending'
 import EmptyState from '../../components/EmptyState'
-import { getAllPosts } from '../../lib/appwrite'
+import { getAllPosts, getLastestPosts } from '../../lib/appwrite'
 import useAppwrite from '../../lib/useAppwrite'
 import VideoCard from '../../components/VideoCard'
 
 const Home = () => {
   // get the useAppwrite hook and destructre is return value and pass the getAllPosts method 
   const { data: posts, refetch } = useAppwrite(getAllPosts);
+  const { data: latestPosts } = useAppwrite(getLastestPosts);
 
   const [refresing, setRefreshing] = useState(false);
 
@@ -33,7 +34,6 @@ const Home = () => {
           <VideoCard 
             video={item}
           />
-          // <Text className='text-3xl text-white'>{item.title}</Text>
         )}
         ListHeaderComponent={() => (
           <View className='my-6 px-4 space-y-6'>
@@ -64,7 +64,7 @@ const Home = () => {
               </Text>
 
               <Trending 
-                posts={[{ id: 1 }, { id: 2 }, { id: 3 }] ?? []}
+                posts={latestPosts ?? []}
               />
             </View>
 
