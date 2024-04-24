@@ -8,28 +8,32 @@ import Trending from '../../components/Trending'
 import EmptyState from '../../components/EmptyState'
 import { getAllPosts } from '../../lib/appwrite'
 import useAppwrite from '../../lib/useAppwrite'
+import VideoCard from '../../components/VideoCard'
 
 const Home = () => {
-  const { data: posts } = useAppwrite(getAllPosts);
+  // get the useAppwrite hook and destructre is return value and pass the getAllPosts method 
+  const { data: posts, refetch } = useAppwrite(getAllPosts);
 
   const [refresing, setRefreshing] = useState(false);
 
+  // here we place the refetch method that will refresh the page when scrolling up
   const onRefresh = async () => {
     setRefreshing(true);
-
-    // recall our videos
-
+    await refetch();
     setRefreshing(false);
   }
 
-  console.log(posts);
+  
   return (
     <SafeAreaView className='bg-primary h-full'>
       <FlatList 
-        data={[{ id: 1 }, { id: 2 }, { id: 3 },]}
+        data={posts}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => (
-          <Text className='text-3xl text-white'>{item.id}</Text>
+          <VideoCard 
+            video={item}
+          />
+          // <Text className='text-3xl text-white'>{item.title}</Text>
         )}
         ListHeaderComponent={() => (
           <View className='my-6 px-4 space-y-6'>
