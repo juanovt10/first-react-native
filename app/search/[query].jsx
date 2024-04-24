@@ -10,11 +10,13 @@ import VideoCard from '../../components/VideoCard'
 import { useLocalSearchParams } from 'expo-router'
 
 const Search = () => {
+
+  // get the query from the search input component
   const { query } = useLocalSearchParams()
+
+  // call the appwrite method, but as this method takes props, pass it as a callback function
   const { data: posts, refetch } = useAppwrite(() => searchPosts(query));
 
-  console.log(query)
-  console.log(posts)
 
   useEffect(() => {
     refetch()
@@ -54,28 +56,3 @@ const Search = () => {
 }
 
 export default Search
-
-
-
-
-
-
-
-
-// import { View, Text } from 'react-native'
-// import React from 'react'
-// import { useLocalSearchParams } from 'expo-router'
-// import { SafeAreaView } from 'react-native-safe-area-context';
-
-// const Search = () => {
-//   const { query } = useLocalSearchParams();
-
-
-//   return (
-//     <SafeAreaView className='bg-primary h-full'>
-//       <Text className='text-3xl text-white'>{query}</Text>
-//     </SafeAreaView>
-//   )
-// }
-
-// export default Search

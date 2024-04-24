@@ -8,20 +8,22 @@ import { Link, router } from 'expo-router'
 import { createUser } from '../../lib/appwrite'
 
 const SignUp = () => {
+  const { setUser, setIsLoggedIn } = useGlobalContext();
+
   const [form, setForm] = useState({
     username: '',
     email: '',
     password: '',
   })
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setSubmitting] = useState(false);
 
   const submit = async () => {
     if(!form.username || !form.email || !form.password) {
       Alert.alert('Error', 'Please fill in all the fields')
     }
     
-    setIsSubmitting(true);
+    setSubmitting(true);
     try {
 
       // trigger the createUser method to add the info to the back end
@@ -29,13 +31,13 @@ const SignUp = () => {
 
       // use the result to trigger the context props (this comes from the global provider)
       setUser(result);
-      setIsLogged(true);
+      setIsLoggedIn(true);
 
       router.replace('/home')
     } catch (err) {
       Alert.alert('Error', err.message);
     } finally {
-      setIsSubmitting(false);
+      setSubmitting(false);
     }
   }
 
