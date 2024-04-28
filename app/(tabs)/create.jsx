@@ -4,17 +4,19 @@ import FormField from '../../components/FormField'
 import CustomButton from '../../components/CustomButton';
 import { ResizeMode, Video } from 'expo-av';
 import { icons } from '../../constants';
-import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
 import { createVideo } from '../../lib/appwrite';
 import { useGlobalContext } from '../../context/GlobalProvider';
 
 const Create = () => {
+
+  // get user from context
   const { user } = useGlobalContext();
 
   const [uploading, setUploading] = useState(false);
 
+  // set form state
   const [form, setForm] = useState({
     title: '',
     video: null,
@@ -22,13 +24,16 @@ const Create = () => {
     prompt: '',
   });
 
+  // this will open the file picker
   const openPicker = async (selectType) => {
+    // use the expo-image-pciker to go directly to gallery
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: selectType === 'image' ? ImagePicker.MediaTypeOptions.Images : ImagePicker.MediaTypeOptions.Videos,
       aspect: [4, 3],
       quality: 1,
     });
 
+    // restart form state in case the user does not pick anything
     if (!result.canceled) {
       if (selectType === 'image') {
         setForm({ ...form, thumbnail: result.assets[0] });
@@ -39,7 +44,9 @@ const Create = () => {
     }
   }
 
+  // submit method
   const submit = async () => {
+    // check that all fields are filled
     if (!form.title || !form.prompt || !form.video || !form.thumbnail) {
       return Alert.alert('Please fill in all the fields')
     }
@@ -47,18 +54,20 @@ const Create = () => {
     setUploading(true);
     
     try {
+
+      // call the appwrite method with hte form and the user id contents
       await createVideo({
         ...form,
         userId: user.$id,
       });
 
-
-
       Alert.alert('Success', 'Post uploaded successfully');
       router.push('/home');
+
     } catch (err) {
       Alert.alert('Error', err.message)
     } finally {
+      //restart states
       setForm({
         title: '',
         video: null,
