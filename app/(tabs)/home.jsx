@@ -9,11 +9,13 @@ import EmptyState from '../../components/EmptyState'
 import { getAllPosts, getLastestPosts } from '../../lib/appwrite'
 import useAppwrite from '../../lib/useAppwrite'
 import VideoCard from '../../components/VideoCard'
+import { useGlobalContext } from '../../context/GlobalProvider'
 
 const Home = () => {
   // get the useAppwrite hook and destructre is return value and pass the getAllPosts method 
   const { data: posts, refetch } = useAppwrite(getAllPosts);
   const { data: latestPosts } = useAppwrite(getLastestPosts);
+  const { user, setUser, setIsLoggedIn } = useGlobalContext();
 
   const [refresing, setRefreshing] = useState(false);
 
@@ -40,10 +42,10 @@ const Home = () => {
             <View className='justify-between items-start flex-row mb-6'>
               <View>
                 <Text className='font-pmedium text-sm text-gray-100'>
-                  Welcome Back
+                  Welcome Back,
                 </Text>
                 <Text className='text-2xl font-psemibold text-white'>
-                  Juano
+                  {user?.username}
                 </Text>
               </View>
 
